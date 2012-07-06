@@ -39,7 +39,8 @@
     (hic/html5
      [:head
       (hic/include-js "d3.js")
-      (hic/include-js "main.js")]
+      (hic/include-js "main.js")
+      (hic/include-css "main.css")]
      [:body
       [:script (str "d3.json(" d ", " f ");")]])))
 
