@@ -41,3 +41,17 @@
                                "normal"
                                "bold")))))
 
+(defn ^:export plaza_traffic [jd]
+  (.. d3
+      (select "body")
+      (append "div")
+      (attr "class" "chart")
+      (selectAll ".bar")
+      (data jd.cash)
+      (enter)
+      (append "div")
+      (attr "class" "bar")
+      (style "width" (fn [d] (str (/ (.-count d) 100) "px")))
+      (style "outline" "1px solid black")
+      (text (fn [d] (Math/round (.-count d))))))
+

@@ -34,14 +34,14 @@
 ;; views
 
 (defn draw [script]
-  (let [data "'data/service_status.json'"
-        draw (str "gswd3.client.main." script)]
+  (let [d (str "'data/" script ".json'")
+        f (str "gswd3.client.main." script)]
     (hic/html5
      [:head
       (hic/include-js "d3.js")
       (hic/include-js "main.js")]
      [:body
-      [:script (str "d3.json(" data ", " draw ");")]])))
+      [:script (str "d3.json(" d ", " f ");")]])))
 
 (defn link [script]
   [:li [:a {:href script} script]])
@@ -53,13 +53,15 @@
    [:body
     [:h2 "Getting Started with D3"]
     [:ul
-     (link "service_status")]]))
+     (link "service_status")
+     (link "plaza_traffic")]]))
 
 ;; routes
 
 (cmp/defroutes main-routes
   (cmp/GET "/" [] (index-page))
   (cmp/GET "/service_status" [] (draw "service_status"))
+  (cmp/GET "/plaza_traffic" [] (draw "plaza_traffic"))
   (rte/resources "/")
   (rte/not-found "Page not found!"))
 
