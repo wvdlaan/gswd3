@@ -46,12 +46,20 @@
       (select "body")
       (append "div")
       (attr "class" "chart")
-      (selectAll ".bar")
+      (selectAll "div.bar")
       (data jd.cash)
       (enter)
       (append "div")
+      (attr "class" "line"))
+  (.. d3
+      (selectAll "div.line")
+      (append "div")
+      (attr "class" "label")
+      (text (fn [d] (str (.-name d)))))
+  (.. d3
+      (selectAll "div.line")
+      (append "div")
       (attr "class" "bar")
       (style "width" (fn [d] (str (/ (.-count d) 100) "px")))
-      (style "outline" "1px solid black")
       (text (fn [d] (Math/round (.-count d))))))
 
