@@ -63,8 +63,8 @@
 
 ;; bus_perf
 
-(defn d3-extent [d f]
-  (. d3 (extent d f)))
+(defn d3-extent [d s]
+  (. d3 (extent d (fn [d] (aget d s)))))
 
 (defn d3-linear-scale [extent r1 r2]
   (.. (.linear (.-scale js/d3))
@@ -75,8 +75,8 @@
   (let [margin 50
         width 700
         height 300
-        x_extent (d3-extent jd (fn [d] (.-collision_with_injury d)))
-        y_extent (d3-extent jd (fn [d] (.-dist_between_fail d)))
+        x_extent (d3-extent jd "collision_with_injury")
+        y_extent (d3-extent jd "dist_between_fail")
         x_scale (d3-linear-scale x_extent margin (- width margin))
         y_scale (d3-linear-scale y_extent (- height margin) margin)
         x_axis (.. (.axis (.-svg js/d3)) (scale x_scale))
