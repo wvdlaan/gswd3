@@ -1,7 +1,10 @@
+/* plaza_traffic */
+
 div.chart{
     font-family:sans-serif;
     font-size:0.7em;
 }
+
 div.bar {
     background-color:DarkRed;
     color:white;
@@ -12,6 +15,7 @@ div.bar {
     text-align:right;
     margin-left:22em;
 }
+
 div.label {
     height:3em;
     line-height:3em;
@@ -22,3 +26,26 @@ div.label {
     text-align:right;
 }
 
+/* bus_perf */
+
+.axis path{
+    fill:none;
+    stroke: black;
+}
+
+.axis {
+    font-size:8pt;
+    font-family:sans-serif;
+}
+
+.tick {
+    fill:none;
+    stroke:black;
+}
+
+circle{
+    stroke:black;
+    stroke-width:0.5px;
+    fill:RoyalBlue;
+    opacity:0.6;
+}

@@ -55,7 +55,8 @@
     [:h2 "Getting Started with D3"]
     [:ul
      (link "service_status")
-     (link "plaza_traffic")]]))
+     (link "plaza_traffic")
+     (link "bus_perf")]]))
 
 ;; routes
 
@@ -63,6 +64,7 @@
   (cmp/GET "/" [] (index-page))
   (cmp/GET "/service_status" [] (draw "service_status"))
   (cmp/GET "/plaza_traffic" [] (draw "plaza_traffic"))
+  (cmp/GET "/bus_perf" [] (draw "bus_perf"))
   (rte/resources "/")
   (rte/not-found "Page not found!"))
 
