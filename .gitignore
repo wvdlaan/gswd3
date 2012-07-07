@@ -3,6 +3,7 @@
 /classes
 /checkouts
 pom.xml
+/resources/public/main.js
 *.jar
 *.class
 .lein-*
