@@ -33,15 +33,20 @@
 
 ;; views
 
-(defn draw [script]
+(defn draw [script & more]
   (let [d (str "'data/" script ".json'")
-        f (str "gswd3.client.main." script)]
+        f (str "gswd3.client.main." script)
+        style (first more)
+        content (rest more)]
     (hic/html5
      [:head
       (hic/include-js "d3.js")
       (hic/include-js "main.js")
-      (hic/include-css (str script ".css"))]
+      (hic/include-css (str script ".css"))
+      (when style
+        (hic/include-css style))]
      [:body
+      content
       [:script (str "d3.json(" d ", " f ");")]])))
 
 (defn link [script]
@@ -57,7 +62,8 @@
      (link "service_status")
      (link "plaza_traffic")
      (link "bus_perf")
-     (link "turnstile_traffic")]]))
+     (link "turnstile_traffic")
+     (link "subway_wait_mean")]]))
 
 ;; routes
 
@@ -67,6 +73,11 @@
   (cmp/GET "/plaza_traffic" [] (draw "plaza_traffic"))
   (cmp/GET "/bus_perf" [] (draw "bus_perf"))
   (cmp/GET "/turnstile_traffic" [] (draw "turnstile_traffic"))
+  (cmp/GET "/subway_wait_mean" []
+           (draw "subway_wait_mean"
+                 "train_colours.css"
+                 [:div#timeseries]
+                 [:div#key]))
   (rte/resources "/")
   (rte/not-found "Page not found!"))
 

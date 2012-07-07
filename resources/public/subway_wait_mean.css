@@ -1,0 +1,47 @@
+body{
+    font-family:sans-serif;
+}
+.axis path, line{
+    stroke:black;
+}
+.timeseries path{
+    stroke-width:3px;
+}
+.timeseries circle{
+    stroke: white;
+}
+.timeseries text{
+    fill: white;
+    stroke: none;
+    font-size:12px;
+    font-weight: bold;
+}
+.line {
+    float:left;
+}
+.line_container{
+    width: 150px;
+    height: 20px;
+}
+path{
+    fill: none;
+}
+.key{
+    float:right;
+}
+.key_line{
+    font-size:17px;
+    width:100%;
+}
+.key_square{
+    height:10px;
+    width:10px;
+    outline:solid 1px black;
+    float:left;
+    margin-right:10px;
+    margin-top:6px;
+    margin-left:10px;
+}
+#timeseries{
+    float:left;
+}

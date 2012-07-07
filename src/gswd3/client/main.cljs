@@ -24,6 +24,8 @@
    (coll? x) (apply array (map clj->js x))
    :else x))
 
+;; d3 helpers
+
 (defn d3-extent [d s]
   (. d3 (extent d (fn [d] (aget d s)))))
 
@@ -191,3 +193,6 @@
         (attr "x" (fn [] (- (/ width 1.6) margin)))
         (attr "y" (/ margin 1.5)))))
 
+;; subway_wait_mean
+
+(defn ^:export subway_wait_mean [jd])
