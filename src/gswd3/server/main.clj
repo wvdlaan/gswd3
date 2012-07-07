@@ -40,7 +40,7 @@
      [:head
       (hic/include-js "d3.js")
       (hic/include-js "main.js")
-      (hic/include-css "main.css")]
+      (hic/include-css (str script ".css"))]
      [:body
       [:script (str "d3.json(" d ", " f ");")]])))
 
@@ -56,7 +56,8 @@
     [:ul
      (link "service_status")
      (link "plaza_traffic")
-     (link "bus_perf")]]))
+     (link "bus_perf")
+     (link "turnstile_traffic")]]))
 
 ;; routes
 
@@ -65,6 +66,7 @@
   (cmp/GET "/service_status" [] (draw "service_status"))
   (cmp/GET "/plaza_traffic" [] (draw "plaza_traffic"))
   (cmp/GET "/bus_perf" [] (draw "bus_perf"))
+  (cmp/GET "/turnstile_traffic" [] (draw "turnstile_traffic"))
   (rte/resources "/")
   (rte/not-found "Page not found!"))
 

@@ -24,6 +24,19 @@
    (coll? x) (apply array (map clj->js x))
    :else x))
 
+(defn d3-extent [d s]
+  (. d3 (extent d (fn [d] (aget d s)))))
+
+(defn d3-linear-scale [extent r1 r2]
+  (.. (.linear (.-scale js/d3))
+      (range (array r1 r2))
+      (domain extent)))
+
+(defn d3-time-scale [extent r1 r2]
+  (.. (.scale (.-time js/d3))
+      (range (array r1 r2))
+      (domain extent)))
+
 ;; service_status
 
 (defn ^:export service_status [jd]
@@ -62,14 +75,6 @@
       (text (fn [d] (Math/round (.-count d))))))
 
 ;; bus_perf
-
-(defn d3-extent [d s]
-  (. d3 (extent d (fn [d] (aget d s)))))
-
-(defn d3-linear-scale [extent r1 r2]
-  (.. (.linear (.-scale js/d3))
-      (range (array r1 r2))
-      (domain extent)))
 
 (defn ^:export bus_perf [jd]
   (let [margin 50
@@ -112,3 +117,28 @@
         (attr "x" (fn [] (- (/ width 2) margin)))
         (attr "y" (/ margin 1.5)))))
 
+;; turnstile_traffic
+
+(defn ^:export turnstile_traffic [jd]
+  (let [margin 50
+        width (- 700 margin)
+        height (- 300 margin)
+        dboth (. jd.times_square (concat jd.grand_central))
+        count_extent (d3-extent dboth "count")
+        time_extent (d3-extent dboth "time")
+        count_scale (d3-linear-scale count_extent height margin)
+        time_scale (d3-time-scale time_extent margin width)
+        count_axis (.. (.axis (.-svg js/d3)) (scale count_scale) (orient "left"))
+        time_axis (.. (.axis (.-svg js/d3)) (scale time_scale))
+        line (.. (.line (.-svg d3))
+                 (x (fn [d] (time_scale (.-time d))))
+                 (y (fn [d] (count_scale (.-count d)))))]
+    (.. d3 (select "body")
+        (append "svg")
+        (attr "class" "chart")
+        (attr "width" (+ width margin))
+        (attr "height" (+ height margin)))
+    (.. d3 (select "svg")
+        (append "path")
+        (attr "d" (line jd.grand_central))
+        (attr "class" "times_square"))))
