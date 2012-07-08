@@ -35,7 +35,7 @@
 
 (defn draw [script & more]
   (let [d (str "'data/" script ".json'")
-        f (str "gswd3.client.main." script)
+        f (str "gswd3.client." script ".draw")
         style (first more)
         content (rest more)]
     (hic/html5
