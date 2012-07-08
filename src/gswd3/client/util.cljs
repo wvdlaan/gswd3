@@ -29,15 +29,15 @@
 (defn d3-extent [d s]
   (. d3 (extent d (fn [d] (aget d s)))))
 
-(defn d3-linear-scale [extent r1 r2]
+(defn d3-scale-linear [r d]
   (.. (.linear (.-scale js/d3))
-      (range (array r1 r2))
-      (domain extent)))
+      (range r)
+      (domain d)))
 
-(defn d3-time-scale [extent r1 r2]
+(defn d3-time-scale [r d]
   (.. (.scale (.-time js/d3))
-      (range (array r1 r2))
-      (domain extent)))
+      (range r)
+      (domain d)))
 
 (defn d3-svg-line [fx fy s]
   (.. (.line (.-svg d3))

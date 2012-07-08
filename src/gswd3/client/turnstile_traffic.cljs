@@ -10,8 +10,8 @@
         dboth (. jd.times_square (concat jd.grand_central))
         count_extent (uti/d3-extent dboth "count")
         time_extent (uti/d3-extent dboth "time")
-        count_scale (uti/d3-linear-scale count_extent height margin)
-        time_scale (uti/d3-time-scale time_extent margin width)
+        count_scale (uti/d3-scale-linear (array height margin) count_extent)
+        time_scale (uti/d3-time-scale (array margin width) time_extent)
         count_axis (.. (.axis (.-svg js/d3)) (scale count_scale) (orient "left"))
         time_axis (.. (.axis (.-svg js/d3)) (scale time_scale))
         line (uti/d3-svg-line

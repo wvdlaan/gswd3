@@ -9,8 +9,8 @@
         height 300
         x_extent (uti/d3-extent jd "collision_with_injury")
         y_extent (uti/d3-extent jd "dist_between_fail")
-        x_scale (uti/d3-linear-scale x_extent margin (- width margin))
-        y_scale (uti/d3-linear-scale y_extent (- height margin) margin)
+        x_scale (uti/d3-scale-linear (array margin (- width margin)) x_extent)
+        y_scale (uti/d3-scale-linear (array (- height margin) margin) y_extent)
         x_axis (.. (.axis (.-svg js/d3)) (scale x_scale))
         y_axis (.. (.axis (.-svg js/d3)) (scale y_scale) (orient "left"))]
     (.. d3 (select "body")
