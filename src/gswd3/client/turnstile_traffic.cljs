@@ -1,5 +1,4 @@
-(ns gswd3.client.turnstile_traffic
-  (:require [gswd3.client.util :as uti]))
+(ns gswd3.client.turnstile_traffic)
 
 (def d3 js/d3)
 
@@ -8,16 +7,20 @@
         width (- 700 margin)
         height (- 300 margin)
         dboth (. jd.times_square (concat jd.grand_central))
-        count_extent (uti/d3-extent dboth "count")
-        time_extent (uti/d3-extent dboth "time")
-        count_scale (uti/d3-scale-linear (array height margin) count_extent)
-        time_scale (uti/d3-time-scale (array margin width) time_extent)
-        count_axis (.. (.axis (.-svg js/d3)) (scale count_scale) (orient "left"))
-        time_axis (.. (.axis (.-svg js/d3)) (scale time_scale))
-        line (uti/d3-svg-line
-              (fn [d] (time_scale (.-time d)))
-              (fn [d] (count_scale (.-count d)))
-              "linear")]
+        count_extent (d3.extent dboth (fn [d] d.count))
+        time_extent (d3.extent dboth (fn [d] d.time))
+        count_scale (.. (d3.scale.linear)
+                        (range (array height margin))
+                        (domain count_extent))
+        time_scale (.. (d3.time.scale)
+                       (range (array margin width))
+                       (domain time_extent))
+        count_axis (.. (d3.svg.axis) (scale count_scale) (orient "left"))
+        time_axis (.. (d3.svg.axis) (scale time_scale))
+        line (.. (d3.svg.line)
+                 (x (fn [d] (time_scale d.time)))
+                 (y (fn [d] (count_scale d.count)))
+                 (interpolate "linear"))]
     (.. d3 (select "body")
         (append "svg")
         (attr "class" "chart")
@@ -44,8 +47,8 @@
         (append "circle")
         (attr "class" "grand_central"))
     (.. d3 (selectAll "circle")
-        (attr "cy" (fn [d] (count_scale (.-count d))))
-        (attr "cx" (fn [d] (time_scale (.-time d))))
+        (attr "cy" (fn [d] (count_scale d.count)))
+        (attr "cx" (fn [d] (time_scale d.time)))
         (attr "r" 3))
     (.. d3 (select "svg")
         (append "g")

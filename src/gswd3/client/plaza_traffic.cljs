@@ -1,5 +1,4 @@
-(ns gswd3.client.plaza_traffic
-  (:require [gswd3.client.util :as uti]))
+(ns gswd3.client.plaza_traffic)
 
 (def d3 js/d3)
 
@@ -15,9 +14,9 @@
   (.. d3 (selectAll "div.line")
       (append "div")
       (attr "class" "label")
-      (text (fn [d] (str (.-name d)))))
+      (text (fn [d] (str d.name))))
   (.. d3 (selectAll "div.line")
       (append "div")
       (attr "class" "bar")
-      (style "width" (fn [d] (str (/ (.-count d) 100) "px")))
-      (text (fn [d] (Math/round (.-count d))))))
+      (style "width" (fn [d] (str (/ d.count 100) "px")))
+      (text (fn [d] (Math/round d.count)))))

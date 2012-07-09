@@ -1,5 +1,4 @@
-(ns gswd3.client.bus_perf
-  (:require [gswd3.client.util :as uti]))
+(ns gswd3.client.bus_perf)
 
 (def d3 js/d3)
 
@@ -7,12 +6,16 @@
   (let [margin 50
         width 700
         height 300
-        x_extent (uti/d3-extent jd "collision_with_injury")
-        y_extent (uti/d3-extent jd "dist_between_fail")
-        x_scale (uti/d3-scale-linear (array margin (- width margin)) x_extent)
-        y_scale (uti/d3-scale-linear (array (- height margin) margin) y_extent)
-        x_axis (.. (.axis (.-svg js/d3)) (scale x_scale))
-        y_axis (.. (.axis (.-svg js/d3)) (scale y_scale) (orient "left"))]
+        x_extent (d3.extent jd (fn [d] d.collision_with_injury))
+        y_extent (d3.extent jd (fn [d] d.dist_between_fail))
+        x_scale (.. (d3.scale.linear)
+                    (range (array margin (- width margin)))
+                    (domain x_extent))
+        y_scale (.. (d3.scale.linear)
+                    (range (array (- height margin) margin))
+                    (domain y_extent))
+        x_axis (.. (d3.svg.axis) (scale x_scale))
+        y_axis (.. (d3.svg.axis) (scale y_scale) (orient "left"))]
     (.. d3 (select "body")
         (append "svg")
         (attr "width" width)
@@ -21,8 +24,8 @@
         (data jd)
         (enter)
         (append "circle")
-        (attr "cx" (fn [d] (x_scale (.-collision_with_injury d))))
-        (attr "cy" (fn [d] (y_scale (.-dist_between_fail d))))
+        (attr "cx" (fn [d] (x_scale d.collision_with_injury)))
+        (attr "cy" (fn [d] (y_scale d.dist_between_fail)))
         (attr "r" 5))
     (.. d3 (select "svg")
         (append "g")
