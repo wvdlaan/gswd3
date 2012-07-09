@@ -64,7 +64,8 @@
      (link "bus_perf")
      (link "turnstile_traffic")
      (link "subway_wait_mean")
-     (link "stations_graph")]]))
+     (link "stations_graph")
+     (link "interarrival_times")]]))
 
 ;; routes
 
@@ -80,6 +81,7 @@
                  [:div#timeseries]
                  [:div#key]))
   (cmp/GET "/stations_graph" [] (draw "stations_graph"))
+  (cmp/GET "/interarrival_times" [] (draw "interarrival_times"))
   (rte/resources "/")
   (rte/not-found "Page not found!"))
 

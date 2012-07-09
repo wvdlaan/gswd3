@@ -1,0 +1,10 @@
+rect {
+    stroke: none;
+}
+line {
+    stroke: black;
+}
+path {
+    stroke: black;
+    fill: none;
+}

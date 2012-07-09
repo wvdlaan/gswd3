@@ -47,3 +47,9 @@
 
 (defn d3-layout-force []
   (.force (.-layout d3)))
+
+(defn d3-layout-stack []
+  (.stack (.-layout d3)))
+
+(defn d3-layout-histogram []
+  (.histogram (.-layout d3)))
