@@ -63,7 +63,8 @@
      (link "plaza_traffic")
      (link "bus_perf")
      (link "turnstile_traffic")
-     (link "subway_wait_mean")]]))
+     (link "subway_wait_mean")
+     (link "stations_graph")]]))
 
 ;; routes
 
@@ -78,6 +79,7 @@
                  "train_colours.css"
                  [:div#timeseries]
                  [:div#key]))
+  (cmp/GET "/stations_graph" [] (draw "stations_graph"))
   (rte/resources "/")
   (rte/not-found "Page not found!"))
 

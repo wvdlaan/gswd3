@@ -44,3 +44,6 @@
       (x fx)
       (y fy)
       (interpolate s)))
+
+(defn d3-layout-force []
+  (.force (.-layout d3)))
