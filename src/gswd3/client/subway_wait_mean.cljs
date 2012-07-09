@@ -26,13 +26,13 @@
 (def count_axis
   (.. (.axis (.-svg js/d3)) (scale percent_scale) (orient "left")))
 
-(defn add_label [circle d i]
-  (.. d3 (select "circle")
+(defn add_label [circle d]
+  (.. d3 (select circle)
       (transition)
       (attr "r" 9))
   (.. d3 (select (str "#" (.-line_id d)))
       (append "text")
-      (text (str (.-line_id d)))
+      (text (subs (str (.-line_name d)) 0 1))
       (attr "text-anchor" "middle")
       (style "dominant-baseline" "central")
       (attr "x" (time_scale (.-time d)))
@@ -51,7 +51,7 @@
         g (.. d3 (select "#chart")
               (append "g")
               (attr "id" id)
-              (attr "class" (str "timeseries" id)))
+              (attr "class" (str "timeseries " id)))
         enter_duration 1000]
     (.. g (append "path")
         (attr "d" (line jd)))
@@ -64,24 +64,47 @@
         (attr "r" 0))
     (.. g (selectAll "circle")
         (transition)
-        (delay (fn [d i] (/ i (* (.-length jd) enter_duration))))
+        (delay (fn [d i] (* (/ i (.-length jd)) enter_duration)))
         (attr "r" 5)
         (each "end" (fn [d i]
                       (this-as elem
                                (when (= i (dec (.-length jd)))
-                                 (add_label elem d i))))))
+                                 (add_label elem d))))))
     (.. g (selectAll "circle")
-        (on "mouseover" (fn [d]
-                          (this-as elem
-                                   (.. d3 (select elem)
-                                       (transition)
-                                       (attr "r" 9)))))
-        (on "mouseout" (fn [d i]
-                         (this-as elem
-                                  (when (not= i (dec (.-length jd)))
-                                    (.. d3 (select elem)
-                                        (transition)
-                                        (attr "r" 5)))))))))
+        (on "mouseover"
+            (fn [d]
+              (this-as elem
+                       (.. d3 (select elem)
+                           (transition)
+                           (attr "r" 9)))))
+        (on "mouseout"
+            (fn [d i]
+              (this-as elem
+                       (when (not= i (dec (.-length jd)))
+                         (.. d3 (select elem)
+                             (transition)
+                             (attr "r" 5)))))))
+    (.. g (selectAll "circle")
+        (on "mouseover.tooltip"
+            (fn [d]
+              (.. d3 (select (str "text." (.-line_id d)))
+                  (remove))
+              (.. d3 (select "#chart")
+                  (append "text")
+                  (text (str (.-late_percent d) "%"))
+                  (attr "x" (+ (time_scale (.-time d))
+                               10))
+                  (attr "y" (- (percent_scale (.-late_percent d))
+                               10))
+                  (attr "class" (str (.-line_id d))))))
+        (on "mouseout.tooltip"
+            (fn [d]
+              (.. d3 (select (str "text." (.-line_id d)))
+                  (transition)
+                  (duration 500)
+                  (style "opacity" 0)
+                  (attr "transform" "translate(10, -10)")
+                  (remove)))))))
 
 (defn get_timeseries_data [d i]
   (let [id (.-line_id d)
