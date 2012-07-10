@@ -1,5 +1,4 @@
-(ns gswd3.client.interarrival_times
-  (:require [gswd3.client.util :as uti]))
+(ns gswd3.client.interarrival_times)
 
 (def d3 js/d3)
 
@@ -10,12 +9,12 @@
 (def bar_max 23)
 
 (defn ^:export draw [jd]
-  (let [stack (uti/d3-layout-stack)
-        histogram (.. (uti/d3-layout-histogram)
+  (let [stack (d3.layout.stack)
+        histogram (.. (d3.layout.histogram)
                       (bins (. d3 (range 1.5 bar_max bar_width)))
                       (frequency false))
-        lines (. jd (map (fn [d] (str "Line_" (.-route_id d)))))
-        counts (. jd (map (fn [d] (histogram (.-interarrival_times d)))))
+        lines (. jd (map (fn [d] (str "Line_" d.route_id))))
+        counts (. jd (map (fn [d] (histogram d.interarrival_times))))
         nested_stat (fn [d stat accessor]
                       (stat counts (fn [d] (stat (. d (map accessor))))))
         max_count 2]))

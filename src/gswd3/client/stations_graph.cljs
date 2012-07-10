@@ -1,5 +1,4 @@
-(ns gswd3.client.stations_graph
-  (:require [gswd3.client.util :as uti]))
+(ns gswd3.client.stations_graph)
 
 (def d3 js/d3)
 
@@ -12,32 +11,32 @@
                 (attr "width" width)
                 (attr "height" height))
         node (.. svg (selectAll "circle.node")
-                 (data (.-nodes jd))
+                 (data jd.nodes)
                  (enter)
                  (append "circle")
                  (attr "class" "node")
                  (attr "r" 12))
         link (.. svg (selectAll "line.link")
-                 (data (.-links jd))
+                 (data jd.links)
                  (enter)
                  (append "line")
                  (style "stroke" "black"))
-        force (.. (uti/d3-layout-force)
+        force (.. (d3.layout.force)
                   (charge -120)
                   (linkDistance 30)
                   (size (array width height))
-                  (nodes (.-nodes jd))
-                  (links (.-links jd))
+                  (nodes jd.nodes)
+                  (links jd.links)
                   (start))]
     (. force
         (on "tick"
             (fn []
               (.. link
-                  (attr "x1" (fn [d] (.-x (.-source d))))
-                  (attr "y1" (fn [d] (.-y (.-source d))))
-                  (attr "x2" (fn [d] (.-x (.-target d))))
-                  (attr "y2" (fn [d] (.-y (.-target d)))))
+                  (attr "x1" (fn [d] d.source.x))
+                  (attr "y1" (fn [d] d.source.y))
+                  (attr "x2" (fn [d] d.target.x))
+                  (attr "y2" (fn [d] d.target.y)))
               (.. node
-                  (attr "cx" (fn [d] (.-x d)))
-                  (attr "cy" (fn [d] (.-y d)))))))
-    (. node (call (.-drag force)))))
+                  (attr "cx" (fn [d] d.x))
+                  (attr "cy" (fn [d] d.y))))))
+    (. node (call force.drag))))

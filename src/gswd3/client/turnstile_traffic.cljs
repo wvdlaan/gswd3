@@ -2,11 +2,12 @@
 
 (def d3 js/d3)
 
+(def margin 50)
+(def width (- 700 margin))
+(def height (- 300 margin))
+        
 (defn ^:export draw [jd]
-  (let [margin 50
-        width (- 700 margin)
-        height (- 300 margin)
-        dboth (. jd.times_square (concat jd.grand_central))
+  (let [dboth (. jd.times_square (concat jd.grand_central))
         count_extent (d3.extent dboth (fn [d] d.count))
         time_extent (d3.extent dboth (fn [d] d.time))
         count_scale (.. (d3.scale.linear)

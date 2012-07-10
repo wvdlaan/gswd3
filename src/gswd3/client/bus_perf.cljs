@@ -2,11 +2,12 @@
 
 (def d3 js/d3)
 
+(def margin 50)
+(def width 700)
+(def height 300)
+
 (defn ^:export draw [jd]
-  (let [margin 50
-        width 700
-        height 300
-        x_extent (d3.extent jd (fn [d] d.collision_with_injury))
+  (let [x_extent (d3.extent jd (fn [d] d.collision_with_injury))
         y_extent (d3.extent jd (fn [d] d.dist_between_fail))
         x_scale (.. (d3.scale.linear)
                     (range (array margin (- width margin)))

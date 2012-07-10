@@ -1,5 +1,4 @@
-(ns gswd3.client.subway_wait_mean
-  (:require [gswd3.client.util :as uti]))
+(ns gswd3.client.subway_wait_mean)
 
 (def d3 js/d3)
 
@@ -13,30 +12,32 @@
                                   (:bottom margins))})
 
 (def time_scale
-  (uti/d3-time-scale (array 0 (:width chart_dimensions))
-                     (array 1230789600000 1301634000000)))
+  (.. (d3.time.scale)
+      (range (array 0 (:width chart_dimensions)))
+      (domain (array 1230789600000 1301634000000))))
 
 (def percent_scale
-  (uti/d3-scale-linear (array (:height chart_dimensions) 0)
-                       (array 65 90)))
+  (.. (d3.scale.linear)
+      (range (array (:height chart_dimensions) 0))
+      (domain (array 65 90))))
 
 (def time_axis
-  (.. (.axis (.-svg js/d3)) (scale time_scale)))
+  (.. (d3.svg.axis) (scale time_scale)))
 
 (def count_axis
-  (.. (.axis (.-svg js/d3)) (scale percent_scale) (orient "left")))
+  (.. (d3.svg.axis) (scale percent_scale) (orient "left")))
 
 (defn add_label [circle d]
   (.. d3 (select circle)
       (transition)
       (attr "r" 9))
-  (.. d3 (select (str "#" (.-line_id d)))
+  (.. d3 (select (str "#" d.line_id))
       (append "text")
-      (text (subs (str (.-line_name d)) 0 1))
+      (text (subs (str d.line_name) 0 1))
       (attr "text-anchor" "middle")
       (style "dominant-baseline" "central")
-      (attr "x" (time_scale (.-time d)))
-      (attr "y" (percent_scale (.-late_percent d)))
+      (attr "x" (time_scale d.time))
+      (attr "y" (percent_scale d.late_percent))
       (attr "class" "linelabel")
       (style "opacity" 0)
       (style "fill" "white")
@@ -44,10 +45,10 @@
       (style "opacity" 1)))
 
 (defn draw_timeseries [jd id]
-  (let [line (uti/d3-svg-line
-              (fn [d] (time_scale (.-time d)))
-              (fn [d] (percent_scale (.-late_percent d)))
-              "linear")
+  (let [line (.. (d3.svg.line)
+                 (x (fn [d] (time_scale d.time)))
+                 (y (fn [d] (percent_scale d.late_percent)))
+                 (interpolate "linear"))
         g (.. d3 (select "#chart")
               (append "g")
               (attr "id" id)
@@ -59,16 +60,16 @@
         (data jd)
         (enter)
         (append "circle")
-        (attr "cx" (fn [d] (time_scale (.-time d))))
-        (attr "cy" (fn [d] (percent_scale (.-late_percent d))))
+        (attr "cx" (fn [d] (time_scale d.time)))
+        (attr "cy" (fn [d] (percent_scale d.late_percent)))
         (attr "r" 0))
     (.. g (selectAll "circle")
         (transition)
-        (delay (fn [d i] (* (/ i (.-length jd)) enter_duration)))
+        (delay (fn [d i] (* (/ i jd.length) enter_duration)))
         (attr "r" 5)
         (each "end" (fn [d i]
                       (this-as elem
-                               (when (= i (dec (.-length jd)))
+                               (when (= i (dec jd.length))
                                  (add_label elem d))))))
     (.. g (selectAll "circle")
         (on "mouseover"
@@ -80,26 +81,24 @@
         (on "mouseout"
             (fn [d i]
               (this-as elem
-                       (when (not= i (dec (.-length jd)))
+                       (when (not= i (dec jd.length))
                          (.. d3 (select elem)
                              (transition)
                              (attr "r" 5)))))))
     (.. g (selectAll "circle")
         (on "mouseover.tooltip"
             (fn [d]
-              (.. d3 (select (str "text." (.-line_id d)))
+              (.. d3 (select (str "text." d.line_id))
                   (remove))
               (.. d3 (select "#chart")
                   (append "text")
-                  (text (str (.-late_percent d) "%"))
-                  (attr "x" (+ (time_scale (.-time d))
-                               10))
-                  (attr "y" (- (percent_scale (.-late_percent d))
-                               10))
-                  (attr "class" (str (.-line_id d))))))
+                  (text (str d.late_percent "%"))
+                  (attr "x" (+ (time_scale d.time) 10))
+                  (attr "y" (- (percent_scale d.late_percent) 10))
+                  (attr "class" (str d.line_id)))))
         (on "mouseout.tooltip"
             (fn [d]
-              (.. d3 (select (str "text." (.-line_id d)))
+              (.. d3 (select (str "text." d.line_id))
                   (transition)
                   (duration 500)
                   (style "opacity" 0)
@@ -107,12 +106,13 @@
                   (remove)))))))
 
 (defn get_timeseries_data [d i]
-  (let [id (.-line_id d)
+  (let [id d.line_id
         ts (. d3 (select (str "#" id)))]
     (if (.empty ts)
       (. d3 (json "data/subway_wait.json"
                   (fn [data]
-                    (let [filtered_data (. data (filter (fn [d] (= (.-line_id d) id))))]
+                    (let [filtered_data
+                          (. data (filter (fn [d] (= d.line_id id))))]
                       (draw_timeseries filtered_data id)))))
       (. ts (remove)))))
 
@@ -134,7 +134,7 @@
                       (enter)
                       (append "div")
                       (attr "class" "key_line")
-                      (attr "id" (fn [d] (str (.-line_id d) "_key"))))]
+                      (attr "id" (fn [d] (str d.line_id "_key"))))]
     (.. g (append "g")
         (attr "class" "x axis")
         (attr "transform" (str "translate(0," (:height chart_dimensions) ")"))
@@ -149,10 +149,10 @@
         (attr "x" 100)
         (attr "y" 50))
     (.. key_items (append "div")
-        (attr "id" (fn [d] (str "key_square_" (.-line_id d))))
-        (attr "class" (fn [d] (str "key_square " (.-line_id d)))))
+        (attr "id" (fn [d] (str "key_square_" d.line_id)))
+        (attr "class" (fn [d] (str "key_square " d.line_id))))
     (.. key_items (append "div")
         (attr "class" "key_label")
-        (text (fn [d] (str (.-line_name d)))))
+        (text (fn [d] (str d.line_name))))
     (.. d3 (selectAll ".key_line")
         (on "click" get_timeseries_data))))
