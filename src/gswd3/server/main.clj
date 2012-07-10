@@ -81,7 +81,9 @@
                  [:div#timeseries]
                  [:div#key]))
   (cmp/GET "/stations_graph" [] (draw "stations_graph"))
-  (cmp/GET "/interarrival_times" [] (draw "interarrival_times"))
+  (cmp/GET "/interarrival_times" []
+           (draw "interarrival_times"
+                 "train_colours.css"))
   (rte/resources "/")
   (rte/not-found "Page not found!"))
 
