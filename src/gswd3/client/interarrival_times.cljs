@@ -1,5 +1,20 @@
 (ns gswd3.client.interarrival_times)
 
+;; sample from interarrival_times.json
+;; [
+;;   {
+;;     "interarrival_times": [
+;;       19.0,
+;;       20.0,
+;;       ...
+;;       20.0,
+;;       20.0
+;;       ],
+;;       "route_id": "F"
+;;   },
+;;   ...
+;; ]
+
 (def d3 js/d3)
 
 (def width 800)

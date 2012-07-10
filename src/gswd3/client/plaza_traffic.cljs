@@ -1,5 +1,12 @@
 (ns gswd3.client.plaza_traffic)
 
+;; sample from plaza_traffic.json
+;; {
+;;   "count": 26774.09756097561,
+;;   "id": 1,
+;;   "name": "Robert F. Kennedy Bridge Bronx Plaza"
+;; }
+
 (def d3 js/d3)
 
 (defn ^:export draw [jd]

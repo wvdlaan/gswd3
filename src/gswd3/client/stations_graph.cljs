@@ -1,5 +1,16 @@
 (ns gswd3.client.stations_graph)
 
+;; sample from stations_graph.json; jd.nodes
+;; {
+;;   "name": "St George"
+;; }
+
+;; sample from stations_graph.json; jd.links
+;; {
+;;   "source": 0,
+;;   "target": 264
+;; }
+
 (def d3 js/d3)
 
 (def width 1500)

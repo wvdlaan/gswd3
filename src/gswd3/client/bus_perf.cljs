@@ -1,5 +1,12 @@
 (ns gswd3.client.bus_perf)
 
+;; sample from bus_perf.json
+;; {
+;;   "collision_with_injury": 3.2,
+;;   "dist_between_fail": 3924.0,
+;;   "customer_accident_rate": 2.12
+;; }
+
 (def d3 js/d3)
 
 (def margin 50)

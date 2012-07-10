@@ -1,5 +1,11 @@
 (ns gswd3.client.turnstile_traffic)
 
+;; sample from turnstile_traffic.json
+;; {
+;;   "count": 87.36111111111111,
+;;   "time": 1328371200000
+;; }
+
 (def d3 js/d3)
 
 (def margin 50)

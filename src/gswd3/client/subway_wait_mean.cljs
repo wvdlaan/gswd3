@@ -1,5 +1,20 @@
 (ns gswd3.client.subway_wait_mean)
 
+;; sample from subway_wait_mean.json
+;; {
+;;   "line_id": "6_Line"
+;;   "line_name": "6 Line",
+;;   "mean": 73.400000000000006
+;; }
+
+;; sample from subway_wait.json
+;; {
+;;   "line_id": 1_Line
+;;   "line_name": "1 Line",
+;;   "late_percent": 73.1,
+;;   "month": 1
+;; }
+
 (def d3 js/d3)
 
 (def container_dimensions {:width 900 :height 400})
@@ -14,7 +29,7 @@
 (def time_scale
   (.. (d3.time.scale)
       (range (array 0 (:width chart_dimensions)))
-      (domain (array 1230789600000 1301634000000))))
+      (domain (array (new js/Date 2008 11 1) (new js/Date 2011 4 1)))))
 
 (def percent_scale
   (.. (d3.scale.linear)
@@ -33,7 +48,7 @@
       (attr "r" 9))
   (.. d3 (select (str "#" d.line_id))
       (append "text")
-      (text (subs (str d.line_name) 0 1))
+      (text (aget (. d.line_id (split "_")) 1))
       (attr "text-anchor" "middle")
       (style "dominant-baseline" "central")
       (attr "x" (time_scale d.time))
