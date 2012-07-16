@@ -1,15 +1,21 @@
-# gswd3
+# Getting Started with D3
 
-I'm an app. Or maybe I'm a library? I haven't decided yet. 
+This is a ClojureScript version of the code repository for the book [Getting Started with D3](https://github.com/mikedewar/getting_started_with_d3).
 
-The choice is up to you!
+The code was translated line by line from Javascript to ClojureScript whenever possible.
+
+As a result it is possible to read the book while looking at the ClojureScript code.
 
 ## Usage
 
-FIXME
+1. [Install leiningen](https://github.com/technomancy/leiningen)
+2. Clone this repository
+3. Run this command from the within the repository:
+
+     $ lein ring server
+
+4. Wait for the browser to open at [http://localhost:3000]
 
 ## License
-
-Copyright © 2012 FIXME
 
 Distributed under the Eclipse Public License, the same as Clojure.

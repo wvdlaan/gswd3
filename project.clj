@@ -1,5 +1,6 @@
 (defproject gswd3 "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+  :description "Code repository for the book 'Getting Started with D3'"
+  :url "github.com/mikedewar/getting_started_with_d3"
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [compojure "1.1.0"]
                  [hiccup "1.0.0"]
