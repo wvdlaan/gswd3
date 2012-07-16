@@ -10,11 +10,12 @@ As a result it is possible to read the book while looking at the ClojureScript c
 
 1. [Install leiningen](https://github.com/technomancy/leiningen)
 2. Clone this repository
-3. Run this command from the within the repository:
+3. Run these commands from the within the repository:
 
+     $ lein cljsbuild once
      $ lein ring server
 
-4. Wait for the browser to open at [http://localhost:3000]
+4. Wait for the browser to open at [http://localhost:3000](http://localhost:3000)
 
 ## License
 
